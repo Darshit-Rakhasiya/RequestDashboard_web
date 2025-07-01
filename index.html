@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Request Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header class="header">
+        <h1><i class="fas fa-project-diagram"></i> HTTP Request Dashboard</h1>
+        <div>
+            <button id="aboutBtn" class="btn btn-secondary"><i class="fas fa-info-circle"></i> About Software</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-sliders-h"></i> Request Settings
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="curlCommand"><i class="fas fa-terminal"></i> CURL BASH:</label>
+                        <textarea id="curlCommand" placeholder="Enter your cURL command here...">curl 'https://jsonplaceholder.typicode.com/posts/1' -H 'Accept: application/json'</textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="expectedText"><i class="fas fa-search"></i> Text to search:</label>
+                            <input type="text" id="expectedText" value="sunt aut">
+                        </div>
+
+                        <div class="form-group" style="width: 120px;">
+                            <label for="iterations"><i class="fas fa-redo"></i> Iterations:</label>
+                            <input type="number" id="iterations" value="50" min="1">
+                        </div>
+                    </div>
+
+                    <div class="buttons-container">
+                        <button id="executeBtn" class="btn btn-primary"><i class="fas fa-play"></i> Execute Requests</button>
+                        <button id="snippetBtn" class="btn btn-secondary"><i class="fas fa-code"></i> Snippet Code</button>
+                        <button id="stopBtn" class="btn btn-danger"><i class="fas fa-stop"></i> Stop</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="card">
+                <div class="tabs">
+                    <div class="tab active" data-tab="results"><i class="fas fa-list"></i> Results</div>
+                    <div class="tab" data-tab="statistics"><i class="fas fa-chart-bar"></i> Statistics</div>
+                </div>
+
+                <div class="tab-content active" id="resultsContent">
+                    <div class="output-content" id="outputText"></div>
+                </div>
+
+                <div class="tab-content" id="statisticsContent">
+                    <div id="statsText">
+                        <div class="stats-item">Total Requests: <span id="totalRequests">0</span></div>
+                        <div class="stats-item">Successful Requests: <span id="successCount" class="success-count">0</span></div>
+                        <div class="stats-item">Failed Requests: <span id="failureCount" class="failure-count">0</span></div>
+                        <div class="stats-item">Success Rate: <span id="successRate">0%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-header">
+            <div><i class="fas fa-tasks"></i> Execution Progress</div>
+            <div id="progressLabel">0/0 completed</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>About HTTP Request Dashboard</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body about-content">
+                <h3><i class="fas fa-project-diagram"></i> HTTP Request Dashboard</h3>
+                <p><i class="fas fa-code-branch"></i> Version 1</p>
+                <p><i class="fas fa-user"></i> Designed & Developed by Darshit Rakhasiya</p>
+
+                <p><i class="fas fa-info-circle"></i> A tool for testing HTTP endpoints by executing repeated cURL commands and verifying response content.</p>
+
+                <h4><i class="fas fa-star"></i> Features:</h4>
+                <ul>
+                    <li>Execute cURL commands multiple times</li>
+                    <li>Verify response content</li>
+                    <li>Generate Python code snippets</li>
+                    <li>View execution statistics</li>
+                    <li>Real-time progress tracking</li>
+                    <li>Color-coded results for quick analysis</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snippet Modal -->
+    <div class="modal" id="snippetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-code"></i> Snippet Code</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="snippet-code" id="snippetCode">
+                    <button class="copy-btn" id="copyBtn"><i class="far fa-copy"></i> Copy</button>
+                    <code id="codeContent"></code>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
