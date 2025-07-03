@@ -1,127 +1,655 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTTP Request Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>cURL Automation Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+  <style>
+    :root {
+      --primary-color: #4a6bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #fd7e14;
+      --info-color: #17a2b8;
+      --dark-color: #343a40;
+      --light-color: #f8f9fa;
+      --background-color: #f5f7ff;
+      --card-color: #ffffff;
+      --text-color: #2d3748;
+      --text-light: #718096;
+    }
+
+<!--    body {-->
+<!--      background-color: var(&#45;&#45;background-color);-->
+<!--      color: var(&#45;&#45;text-color);-->
+<!--      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
+<!--    }-->
+
+
+
+      body {
+      background-color: #e6e0ff; /* Light violet (customize as needed) */
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.5s ease-in-out; /* Smooth transition */
+    }
+
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-color), #3a56e8);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .header h2 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+
+    .form-section {
+      background-color: var(--card-color);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(74, 107, 255, 0.25);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .log-box {
+      background-color: #e0ccff;
+      color: #1a1a1a;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      padding: 1.5rem;
+      border-radius: 8px;
+      height: 400px;
+      overflow-y: scroll;
+      font-size: 14px;
+      line-height: 1.5;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+      border: 1px solid #333;
+    }
+
+    .code-box {
+       background-color: #8b5cf6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      height: 400px;
+      overflow-y: scroll;
+      font-size: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn {
+      border-radius: 8px;
+      padding: 0.5rem 1.25rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: #3a56e8;
+      border-color: #3a56e8;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+      transform: translateY(-1px);
+    }
+
+<!--    .btn-clear {-->
+<!--      background-color: #e2e8f0;-->
+<!--      color: var(&#45;&#45;text-color);-->
+<!--      border: 1px solid #cbd5e0;-->
+<!--    }-->
+
+<!--    .btn-clear:hover {-->
+<!--      background-color: #cbd5e0;-->
+<!--      color: var(&#45;&#45;text-color);-->
+<!--      transform: translateY(-1px);-->
+<!--    }-->
+
+
+
+  .btn-clear {
+    background-color: #ffc107;         /* Original color */
+    color: #000;                       /* Black text/icon for contrast */
+    border: none;
+    transition: all 0.3s ease-in-out;  /* Smooth animation */
+  }
+
+  .btn-clear:hover {
+    background-color: #e0a800;         /* Darker yellow on hover */
+    transform: scale(1.05);            /* Slight zoom effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  }
+
+  .btn-clear:active {
+    transform: scale(0.98);            /* Slight press effect */
+  }
+
+
+
+    .btn-snippet {
+      background-color: #8b5cf6;
+      border-color: #8b5cf6;
+      color: white;
+    }
+
+    .btn-snippet:hover {
+      background-color: #7c3aed;
+      border-color: #7c3aed;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .nav-tabs {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .nav-tabs .nav-link {
+      color: var(--text-light);
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-weight: 500;
+      border-radius: 8px 8px 0 0;
+      margin-right: 0.5rem;
+    }
+
+    .nav-tabs .nav-link:hover {
+      color: var(--primary-color);
+      background-color: rgba(74, 107, 255, 0.05);
+    }
+
+    .nav-tabs .nav-link.active {
+      color: var(--primary-color);
+      background-color: transparent;
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    .log-success { color: var(--success-color); }
+    .log-error { color: var(--danger-color); }
+    .log-warning { color: var(--warning-color); }
+    .log-info { color: var(--info-color); }
+    .log-progress { color: var(--secondary-color); }
+    .log-summary { color: var(--success-color); font-weight: bold; }
+
+    .spinner-border-sm {
+      width: 1rem;
+      height: 1rem;
+      border-width: 0.15em;
+    }
+
+    .execution-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .status-indicator {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-running {
+      background-color: rgba(253, 126, 20, 0.1);
+      color: var(--warning-color);
+      border: 1px solid rgba(253, 126, 20, 0.2);
+    }
+
+    .status-stopped {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-color);
+      border: 1px solid rgba(220, 53, 69, 0.2);
+    }
+
+    .status-completed {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-color);
+      border: 1px solid rgba(40, 167, 69, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .form-section {
+        padding: 1.5rem;
+      }
+
+      .header {
+        padding: 1rem;
+      }
+
+      .execution-controls {
+        gap: 0.5rem;
+      }
+
+      .btn
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 </head>
 <body>
-    <header class="header">
-        <h1><i class="fas fa-project-diagram"></i> HTTP Request Dashboard</h1>
-        <div>
-            <button id="aboutBtn" class="btn btn-secondary"><i class="fas fa-info-circle"></i> About Software</button>
+  <div class="header"
+     style="
+       background: linear-gradient(90deg, #6a11cb, #2575fc);
+       color: white;
+       padding: 14px 24px;
+       border-radius: 8px;
+       text-align: center;
+       transition: all 0.5s ease;
+     "
+     onmouseover="this.style.background='linear-gradient(90deg, #2575fc, #6a11cb)';
+                  this.style.transform='scale(1.03)';
+                  this.style.boxShadow='0 6px 20px rgba(0, 0, 0, 0.2)'"
+     onmouseout="this.style.background='linear-gradient(90deg, #6a11cb, #2575fc)';
+                 this.style.transform='scale(1)';
+                 this.style.boxShadow='none'">
+  <h2 style="margin: 0;">cURL Tester Dashboard</h2>
+</div>
+
+
+
+
+  <div class="container mt-4">
+    <div class="form-section">
+      <form id="curlForm">
+        <div class="mb-3">
+          <label for="curlCommand" class="form-label">cURL Command</label>
+          <textarea class="form-control" id="curlCommand" rows="3" placeholder="curl 'https://httpbin.org/get'"></textarea>
         </div>
-    </header>
-
-    <div class="main-container">
-        <div class="left-panel">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-sliders-h"></i> Request Settings
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="curlCommand"><i class="fas fa-terminal"></i> CURL BASH:</label>
-                        <textarea id="curlCommand" placeholder="Enter your cURL command here...">curl 'https://jsonplaceholder.typicode.com/posts/1' -H 'Accept: application/json'</textarea>
-                    </div>
-
-                    <div style="display: flex; gap: 15px;">
-                        <div class="form-group" style="flex: 1;">
-                            <label for="expectedText"><i class="fas fa-search"></i> Text to search:</label>
-                            <input type="text" id="expectedText" value="sunt aut">
-                        </div>
-
-                        <div class="form-group" style="width: 120px;">
-                            <label for="iterations"><i class="fas fa-redo"></i> Iterations:</label>
-                            <input type="number" id="iterations" value="50" min="1">
-                        </div>
-                    </div>
-
-                    <div class="buttons-container">
-                        <button id="executeBtn" class="btn btn-primary"><i class="fas fa-play"></i> Execute Requests</button>
-                        <button id="snippetBtn" class="btn btn-secondary"><i class="fas fa-code"></i> Snippet Code</button>
-                        <button id="stopBtn" class="btn btn-danger"><i class="fas fa-stop"></i> Stop</button>
-                    </div>
-                </div>
-            </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="expectedText" class="form-label">Expected Text</label>
+            <input type="text" class="form-control" id="expectedText" placeholder="httpbin" />
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="iterations" class="form-label"> Total Iterations</label>
+            <input type="number" class="form-control" id="iterations" value="10" min="1" />
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="delay" class="form-label">Delay Time (seconds)</label>
+            <input type="number" class="form-control" id="delay" value="1" min="0" step="0.5" />
+          </div>
         </div>
 
-        <div class="right-panel">
-            <div class="card">
-                <div class="tabs">
-                    <div class="tab active" data-tab="results"><i class="fas fa-list"></i> Results</div>
-                    <div class="tab" data-tab="statistics"><i class="fas fa-chart-bar"></i> Statistics</div>
-                </div>
 
-                <div class="tab-content active" id="resultsContent">
-                    <div class="output-content" id="outputText"></div>
-                </div>
 
-                <div class="tab-content" id="statisticsContent">
-                    <div id="statsText">
-                        <div class="stats-item">Total Requests: <span id="totalRequests">0</span></div>
-                        <div class="stats-item">Successful Requests: <span id="successCount" class="success-count">0</span></div>
-                        <div class="stats-item">Failed Requests: <span id="failureCount" class="failure-count">0</span></div>
-                        <div class="stats-item">Success Rate: <span id="successRate">0%</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <button type="submit" id="executeBtn"
+        style="background-image: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border: none; border-radius: 8px; padding: 0.5rem 1.25rem; font-weight: 500; transition: all 0.3s ease-in-out;"
+        onmouseover="this.style.backgroundImage='linear-gradient(135deg, #4f46e5, #4338ca)'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)'"
+        onmouseout="this.style.backgroundImage='linear-gradient(135deg, #6366f1, #4f46e5)'; this.style.transform='scale(1)'; this.style.boxShadow='none'"
+        onmousedown="this.style.transform='scale(0.95)'"
+        onmouseup="this.style.transform='scale(1.05)'"
+      >
+        <span id="executeIcon">▶</span>
+        <span id="executeText">Start Execution</span>
+      </button>
+
+   
+
+
+<button type="button" id="stopBtn"
+  style="background-image: linear-gradient(135deg, #ff4d4d, #c0392b); color: white; border: none; border-radius: 8px; padding: 0.5rem 1.25rem; font-weight: 500; transition: all 0.3s ease-in-out;"
+  onmouseover="this.style.backgroundImage='linear-gradient(135deg, #e74c3c, #992d22)'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)'"
+  onmouseout="this.style.backgroundImage='linear-gradient(135deg, #ff4d4d, #c0392b)'; this.style.transform='scale(1)'; this.style.boxShadow='none'"
+  onmousedown="this.style.transform='scale(0.95)'"
+  onmouseup="this.style.transform='scale(1.05)'"
+>
+  <i class="bi bi-stop-circle-fill"></i> Stop Execution
+</button>
+
+
+
+          &nbsp;<button type="button" id="snippetBtn"
+          style="background-image: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border: none; border-radius: 8px; padding: 0.5rem 1.25rem; font-weight: 500; transition: all 0.3s ease-in-out;"
+          onmouseover="this.style.backgroundImage='linear-gradient(135deg, #7c3aed, #6b21a8)'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.2)'"
+          onmouseout="this.style.backgroundImage='linear-gradient(135deg, #8b5cf6, #7c3aed)'; this.style.transform='scale(1)'; this.style.boxShadow='none'"
+          onmousedown="this.style.transform='scale(0.95)'"
+          onmouseup="this.style.transform='scale(1.05)'"
+        >
+          <i class="bi bi-code-slash"></i> Run Snippet Code</button>
+
+          &nbsp;
+                  <!-- Clear Button -->
+<!--          <button style="background-color: 	#e6e0ff;" type="button" class="btn btn-clear custom-clear-btn" id="clearBtn">-->
+<!--          <i class="bi bi-eraser-fill"></i> Clear-->
+<!--        </button>-->
+
+<button type="button" id="clearBtn"
+  style="background-image: linear-gradient(135deg, #3a3a3a, #000000); color: white; border: none; border-radius: 8px; padding: 0.5rem 1.25rem; font-weight: 500; transition: all 0.3s ease-in-out;"
+  onmouseover="this.style.backgroundImage='linear-gradient(135deg, #1a1a1a, #000000)'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.25)'"
+  onmouseout="this.style.backgroundImage='linear-gradient(135deg, #3a3a3a, #000000)'; this.style.transform='scale(1)'; this.style.boxShadow='none'"
+  onmousedown="this.style.transform='scale(0.95)'"
+  onmouseup="this.style.transform='scale(1.05)'"
+>
+  <i class="bi bi-eraser-fill"></i> Clear
+</button>
+
+
+
+          <div id="statusIndicator" class="status-indicator" style="display: none;"></div>
+      </form>
     </div>
 
-    <div class="progress-container">
-        <div class="progress-header">
-            <div><i class="fas fa-tasks"></i> Execution Progress</div>
-            <div id="progressLabel">0/0 completed</div>
+    <div class="mt-4">
+      <ul class="nav nav-tabs" id="outputTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="log-tab" data-bs-toggle="tab" data-bs-target="#log-tab-pane" type="button" role="tab">Output</button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="code-tab" data-bs-toggle="tab" data-bs-target="#code-tab-pane" type="button" role="tab">Snippet Code</button>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="log-tab-pane" role="tabpanel" aria-labelledby="log-tab" tabindex="0">
+          <div class="log-box" id="outputLog">Ready. Enter a cURL command and click Execute.</div>
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
+        <div class="tab-pane fade" id="code-tab-pane" role="tabpanel" aria-labelledby="code-tab" tabindex="0">
+          <pre class="code-box"><code class="language-python" id="pythonCode"># Generated Python code will appear here</code></pre>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- About Modal -->
-    <div class="modal" id="aboutModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>About HTTP Request Dashboard</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body about-content">
-                <h3><i class="fas fa-project-diagram"></i> HTTP Request Dashboard</h3>
-                <p><i class="fas fa-code-branch"></i> Version 1</p>
-                <p><i class="fas fa-user"></i> Designed & Developed by Darshit Rakhasiya</p>
+  <!-- JavaScript remains exactly the same -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>
+    let currentTaskId = null;
+    let isExecuting = false;
 
-                <p><i class="fas fa-info-circle"></i> A tool for testing HTTP endpoints by executing repeated cURL commands and verifying response content.</p>
+    function updateExecutionState(executing, status = '') {
+      isExecuting = executing;
+      const executeBtn = document.getElementById("executeBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const executeIcon = document.getElementById("executeIcon");
+      const executeText = document.getElementById("executeText");
+      const statusIndicator = document.getElementById("statusIndicator");
 
-                <h4><i class="fas fa-star"></i> Features:</h4>
-                <ul>
-                    <li>Execute cURL commands multiple times</li>
-                    <li>Verify response content</li>
-                    <li>Generate Python code snippets</li>
-                    <li>View execution statistics</li>
-                    <li>Real-time progress tracking</li>
-                    <li>Color-coded results for quick analysis</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+      if (executing) {
+        executeBtn.disabled = true;
+        executeIcon.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+        executeText.textContent = "Running...";
+        stopBtn.style.display = "inline-block";
 
-    <!-- Snippet Modal -->
-    <div class="modal" id="snippetModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-code"></i> Snippet Code</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="snippet-code" id="snippetCode">
-                    <button class="copy-btn" id="copyBtn"><i class="far fa-copy"></i> Copy</button>
-                    <code id="codeContent"></code>
-                </div>
-            </div>
-        </div>
-    </div>
+        statusIndicator.textContent = status || "Executing...";
+        statusIndicator.className = "status-indicator status-running";
+        statusIndicator.style.display = "inline-block";
+      } else {
+        executeBtn.disabled = false;
+        executeIcon.textContent = "▶";
+        executeText.textContent = "Execute";
+        stopBtn.style.display = "none";
+
+        if (status) {
+          statusIndicator.textContent = status;
+          statusIndicator.className = status.includes('completed') ?
+            "status-indicator status-completed" :
+            "status-indicator status-stopped";
+
+          // Hide status after 3 seconds
+          setTimeout(() => {
+            statusIndicator.style.display = "none";
+          }, 3000);
+        } else {
+          statusIndicator.style.display = "none";
+        }
+      }
+    }
+
+    function appendLog(message, type = 'info') {
+      const logBox = document.getElementById("outputLog");
+      const timestamp = new Date().toLocaleTimeString();
+      const logClass = `log-${type}`;
+
+      const logEntry = `<div class="${logClass}">[${timestamp}] ${message}</div>`;
+      logBox.innerHTML += logEntry;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById("outputLog").innerHTML = "Ready. Enter a cURL command and click Execute.";
+    }
+
+    document.getElementById("curlForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (isExecuting) {
+        return;
+      }
+
+      const curl = document.getElementById("curlCommand").value.trim();
+      const expected = document.getElementById("expectedText").value.trim();
+      const iterationsInput = document.getElementById("iterations").value.trim();
+      const delayInput = document.getElementById("delay").value.trim();
+
+      const iterations = iterationsInput ? parseInt(iterationsInput) : 10;
+      const delay = delayInput ? parseFloat(delayInput) : 1.0;
+
+      if (isNaN(iterations) || iterations < 1) {
+        alert("Iterations must be a number greater than 0");
+        return;
+      }
+
+      if (isNaN(delay) || delay < 0) {
+        alert("Delay must be a number greater than or equal to 0");
+        return;
+      }
+
+      if (!curl) {
+        alert("Please enter a cURL command");
+        return;
+      }
+
+      clearLog();
+      updateExecutionState(true, "Starting execution...");
+
+      try {
+        const response = await fetch("/api/run-curl-stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ curl, expected, iterations, delay }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+
+                if (data.task_id) {
+                  currentTaskId = data.task_id;
+                } else if (data.log) {
+                  appendLog(data.log, data.type || 'info');
+                } else if (data.error) {
+                  appendLog(` ${data.error}`, 'error');
+                }
+                 if (data.completed) {
+                updateExecutionState(false, "Execution completed!");
+                currentTaskId = null;
+              } else if (data.stopped) {
+                updateExecutionState(false, "Execution stopped");
+                currentTaskId = null;
+              }
+            } catch (e) {
+              console.error('Error parsing JSON:', e);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      appendLog(` Network Error: ${err.message}`, 'error');
+      updateExecutionState(false, "Execution failed");
+      currentTaskId = null;
+    }
+  });
+
+  document.getElementById("stopBtn").addEventListener("click", async () => {
+    if (!currentTaskId) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/stop-execution", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_id: currentTaskId }),
+      });
+
+      if (response.ok) {
+        appendLog("Stop signal sent...", 'warning');
+      }
+    } catch (err) {
+      appendLog(` Error stopping execution: ${err.message}`, 'error');
+    }
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    if (isExecuting) {
+      if (!confirm("Execution is running. Do you want to stop and clear?")) {
+        return;
+      }
+      // Stop execution if running
+      if (currentTaskId) {
+        document.getElementById("stopBtn").click();
+      }
+    }
+
+    document.getElementById("curlCommand").value = "";
+    document.getElementById("expectedText").value = "";
+    document.getElementById("iterations").value = 10;
+    document.getElementById("delay").value = 1;
+    clearLog();
+    document.getElementById("pythonCode").textContent = "# Generated Python code will appear here";
+    updateExecutionState(false);
+  });
+
+  document.getElementById("snippetBtn").addEventListener("click", async () => {
+    const curl = document.getElementById("curlCommand").value.trim();
+    const expected = document.getElementById("expectedText").value.trim();
+
+    if (!curl) {
+      alert("Please enter a cURL command first");
+      return;
+    }
+
+    if (!expected) {
+      alert("Please enter expected text");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/generate-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ curl, expected }),
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        document.getElementById("pythonCode").textContent = result.code;
+        hljs.highlightElement(document.getElementById("pythonCode"));
+        // Switch to the code tab
+        new bootstrap.Tab(document.getElementById('code-tab')).show();
+      } else {
+        const error = await res.json();
+        alert(`Error generating code: ${error.detail || 'Unknown error'}`);
+      }
+    } catch (err) {
+      alert(`Network error: ${err.message}`);
+    }
+  });
+
+  // Initialize highlight.js
+  hljs.highlightAll();
+
+  // Handle page unload to clean up running tasks
+  window.addEventListener('beforeunload', () => {
+    if (currentTaskId) {
+      navigator.sendBeacon('/api/stop-execution', JSON.stringify({ task_id: currentTaskId }));
+    }
+  });
+  </script>
 </body>
 </html>
