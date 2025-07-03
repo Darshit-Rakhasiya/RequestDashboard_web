@@ -684,7 +684,7 @@ textarea {
 
 
 
-                    
+
 
                     <div class="buttons-container">
 
@@ -1218,33 +1218,9 @@ textarea {
 
 
 
-        <script>
-  const libButtons = document.querySelectorAll('.proxy-options .btn[data-lib]');
 
-  libButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Remove active state from all library buttons
-      libButtons.forEach(b => b.classList.remove('active', 'btn-primary'));
-      // Add to selected
-      btn.classList.add('active', 'btn-primary');
+  </script>
 
-      // Save to hidden field
-      const selectedLib = btn.getAttribute('data-lib');
-      document.getElementById("requestLibType").value = selectedLib;
 
-      // Optional log
-      appendLog(`Request Library selected: ${selectedLib}`);
-    });
-  });
-
-  function appendLog(message) {
-    const logBox = document.getElementById("outputLog");
-    const timestamp = new Date().toLocaleTimeString();
-    logBox.innerHTML += `<div>[${timestamp}] ${message}</div>`;
-    logBox.scrollTop = logBox.scrollHeight;
-  }
-</script>
-
-    </script>
 </body>
 </html>
