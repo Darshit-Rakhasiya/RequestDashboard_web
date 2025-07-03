@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -585,6 +587,14 @@ textarea {
         grid-template-columns: 1fr;
     }
 }
+
+
+  .proxy-option.active {
+    background-color: #0d6efd !important;
+    color: white !important;
+    border-color: #0d6efd !important;
+  }
+
     </style>
 </head>
 <body>
@@ -654,7 +664,32 @@ textarea {
                         </div>
                     </div>
 
+
+
+                    <!-- ✅ REQUEST LIBRARY SETTINGS UI -->
+<div class="proxy-section p-4 rounded shadow mt-4" style="background-color: #e0f2ff; border: 1px solid #cce;">
+  <h5><i class="bi bi-lightning-charge-fill"></i> Request Library</h5>
+
+  <div class="proxy-options d-flex gap-2 flex-wrap mt-3">
+    <div class="proxy-option btn btn-outline-primary" data-lib="requests">requests</div>
+    <div class="proxy-option btn btn-outline-primary" data-lib="curl_cffi">curl_cffi</div>
+    <div class="proxy-option btn btn-outline-primary" data-lib="httpx">httpx</div>
+    <div class="proxy-option btn btn-outline-primary" data-lib="rnet">RnEt</div>
+  </div>
+
+  <!-- Hidden input to store selected request lib -->
+  <input type="hidden" id="requestLibType" value="requests">
+</div>
+
+
+
+
+                    
+
                     <div class="buttons-container">
+
+
+
                         <button id="executeBtn" class="btn btn-primary"><i class="fas fa-play"></i> Execute Requests</button>
                         <button id="snippetBtn" class="btn btn-secondary"><i class="fas fa-code"></i> Snippet Code</button>
                         <button id="stopBtn" class="btn btn-danger"><i class="fas fa-stop"></i> Stop</button>
@@ -1180,6 +1215,36 @@ textarea {
 
         // Initialize the application when the DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
+
+
+
+        <script>
+  const libButtons = document.querySelectorAll('.proxy-options .btn[data-lib]');
+
+  libButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove active state from all library buttons
+      libButtons.forEach(b => b.classList.remove('active', 'btn-primary'));
+      // Add to selected
+      btn.classList.add('active', 'btn-primary');
+
+      // Save to hidden field
+      const selectedLib = btn.getAttribute('data-lib');
+      document.getElementById("requestLibType").value = selectedLib;
+
+      // Optional log
+      appendLog(`Request Library selected: ${selectedLib}`);
+    });
+  });
+
+  function appendLog(message) {
+    const logBox = document.getElementById("outputLog");
+    const timestamp = new Date().toLocaleTimeString();
+    logBox.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+</script>
+
     </script>
 </body>
 </html>
